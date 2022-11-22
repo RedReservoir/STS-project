@@ -61,6 +61,10 @@ def import_data():
         names=["gold-sim"]
         )
 
+    MSRpar_gs_df /= 5
+    MSRvid_gs_df /= 5
+    SMTeuro_gs_df /= 5
+
     #
     # Join sentence pairs and gold values
     #
