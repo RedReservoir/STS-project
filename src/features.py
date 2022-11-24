@@ -73,6 +73,11 @@ def lemmatize_sentence(s):
   return ls
 
 
+def pos_tag_sentence(s):
+
+    return nltk.pos_tag(s)
+
+
 #
 # Get all the Features
 #
@@ -95,11 +100,18 @@ def get_features(df):
         lemmatize_stopwords_sentence_1 = lemmatize_sentence(tokenized_stopwords_sentence_1)
         lemmatize_stopwords_sentence_2 = lemmatize_sentence(tokenized_stopwords_sentence_2)
 
+        pos_tag_lemmatize_sentence_1 = pos_tag_sentence(lemmatize_sentence_1)
+        pos_tag_lemmatize_sentence_2 = pos_tag_sentence(lemmatize_sentence_2)
+
+        pos_tag_lemmatize_stopwords_sentence_1 = pos_tag_sentence(lemmatize_stopwords_sentence_1)
+        pos_tag_lemmatize_stopwords_sentence_2 = pos_tag_sentence(lemmatize_stopwords_sentence_2)
+
         features_mat[index] = [
             jac_sim(tokenized_sentence_1, tokenized_sentence_2),
             jac_sim(tokenized_stopwords_sentence_1, tokenized_stopwords_sentence_2),
             jac_sim(lemmatize_sentence_1, lemmatize_sentence_2),
-            jac_sim(lemmatize_stopwords_sentence_1, lemmatize_stopwords_sentence_2)
+            jac_sim(lemmatize_stopwords_sentence_1, lemmatize_stopwords_sentence_2),
+
         ]
 
     return np.array(features_mat)
@@ -109,4 +121,5 @@ sentence = "The cat is in the house and the mice"
 tok = tokenize_sentence_lwc_punc(sentence)
 sw = remove_stopwords(tok)
 print(lemmatize_sentence(sw))
+print(pos_tag_sentence(sw))
 
