@@ -144,6 +144,47 @@ def lemmas_stopwords_set_similarity(s_df):
     return sim_arr
 
 
+def ngram_overlap(s_df, n):
+    """
+    Calculates the ngram overlap on sentence sets.
+
+    Transformations:
+        - Preprocessing.
+        - Tokenizing.
+        - Ngrams.
+
+    Similarity calculation: Ngrams.
+
+    :param s_df: pd.DataFrame
+        Sentence pairs DataFrame.
+
+    :return: np.ndarray
+        A 1D numpy array with similarity values for all sentence pairs.
+    """
+
+    sim_arr = np.empty(shape=(len(s_df)))
+
+    for idx, row in s_df.iterrows():
+        s1, s2 = row["s1"], row["s2"]
+
+        tkns_1 = tokenize(preprocess_sentence(s1))
+        tkns_2 = tokenize(preprocess_sentence(s2))
+
+        ngram_1 = set(get_ngrams(tkns_1, n=n))
+        ngram_2 = set(get_ngrams(tkns_2, n=n))
+        print("=======")
+        print(ngram_1)
+        print(ngram_2)
+
+        if len(ngram_1 & ngram_2) == 0:
+            sim_arr[idx] = 0
+        else:
+            sim_arr[idx] = 2 * (1 / ((len(ngram_1) / len(ngram_1 & ngram_2) + len(ngram_2) / len(ngram_1 & ngram_2))))
+        print(sim_arr[idx])
+
+    return sim_arr
+
+
 def get_all_features(s_df):
     """
     Calculates all features on sentence sets.
@@ -155,11 +196,14 @@ def get_all_features(s_df):
         A 2D numpy array where each column contains similarity values for all sentence pairs.
     """
 
-    feat_arr = np.empty(shape=(len(s_df), 4))
+    feat_arr = np.empty(shape=(len(s_df), 7))
 
     feat_arr[:, 0] = preprocessed_tokens_set_similarity(s_df)
     feat_arr[:, 1] = preprocessed_tokens_stopwords_set_similarity(s_df)
     feat_arr[:, 2] = lemmas_set_similarity(s_df)
     feat_arr[:, 3] = lemmas_stopwords_set_similarity(s_df)
+    feat_arr[:, 4] = ngram_overlap(s_df, 1)
+    feat_arr[:, 5] = ngram_overlap(s_df, 2)
+    feat_arr[:, 6] = ngram_overlap(s_df, 3)
 
     return feat_arr
