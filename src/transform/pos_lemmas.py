@@ -23,7 +23,6 @@ def get_pos_tags(tkns):
     :return: list of str
         Sentence token POS tags.
     """
-
     return [el[1] for el in nltk.pos_tag(tkns)]
 
 

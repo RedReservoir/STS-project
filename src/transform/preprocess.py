@@ -37,6 +37,7 @@ def preprocess_sentence(s_str):
         The preprocessed sentence.
     """
 
+    s_str = re.sub(r'\d+', '', s_str)
     prep_s_str = s_str.lower()
     for key, value in contraction_trans_dict.items():
         prep_s_str = re.sub(key, value, prep_s_str)
