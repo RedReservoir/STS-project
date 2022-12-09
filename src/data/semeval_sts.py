@@ -14,7 +14,7 @@ def load_train_data():
 
     # Load sentence pairs
 
-    with open("../semeval_sts_data/train/STS.input.MSRpar.txt") as MSRpar_input_file:
+    with open("semeval_sts_data/train/STS.input.MSRpar.txt") as MSRpar_input_file:
         MSRpar_text = MSRpar_input_file.read()
 
     MSRpar_ss = re.split("\n|\t", MSRpar_text)[:-1]
@@ -26,14 +26,14 @@ def load_train_data():
     )
 
     MSRvid_input_df = pd.read_csv(
-        "../semeval_sts_data/train/STS.input.MSRvid.txt",
+        "semeval_sts_data/train/STS.input.MSRvid.txt",
         sep='\t',
         header=None,
         names=["s1", "s2"]
     )
 
     SMTeuro_input_df = pd.read_csv(
-        "../semeval_sts_data/train/STS.input.SMTeuroparl.txt",
+        "semeval_sts_data/train/STS.input.SMTeuroparl.txt",
         sep='\t',
         header=None,
         names=["s1", "s2"]
@@ -42,21 +42,21 @@ def load_train_data():
     # Load similarity scores (gold values)
 
     MSRpar_gs_df = pd.read_csv(
-        "../semeval_sts_data/train/STS.gs.MSRpar.txt",
+        "semeval_sts_data/train/STS.gs.MSRpar.txt",
         sep='\t',
         header=None,
         names=["gold-sim"]
     )
 
     MSRvid_gs_df = pd.read_csv(
-        "../semeval_sts_data/train/STS.gs.MSRvid.txt",
+        "semeval_sts_data/train/STS.gs.MSRvid.txt",
         sep='\t',
         header=None,
         names=["gold-sim"]
     )
 
     SMTeuro_gs_df = pd.read_csv(
-        "../semeval_sts_data/train/STS.gs.SMTeuroparl.txt",
+        "semeval_sts_data/train/STS.gs.SMTeuroparl.txt",
         sep='\t',
         header=None,
         names=["gold-sim"]

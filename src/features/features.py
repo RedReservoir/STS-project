@@ -5,7 +5,8 @@ from transform.preprocess import *
 from transform.pos_lemmas import *
 from transform.synsets import *
 
-from utils.similarities import *
+from utils.set_similarities import *
+from utils.synset_similarities import *
 
 
 def preprocessed_tokens_set_similarity(s_df, similarity="jaccard"):
@@ -266,6 +267,76 @@ def synset_similarity(s_df, similarity="path"):
         Transformations:
             - Preprocessing.
             - Tokenizing.
+            - POS tag.
+            - Synset
+
+        Similarity calculation: Synset similarity.
+
+        :param s_df: pd.DataFrame
+            Sentence pairs DataFrame.
+
+        :return: np.ndarray
+            A 1D numpy array with similarity values for all sentence pairs.
+        """
+
+    sim_arr = np.empty(shape=(len(s_df)))
+
+    for idx, row in s_df.iterrows():
+        s1, s2 = row["s1"], row["s2"]
+
+        tkns_1 = tokenize(preprocess_sentence(s1))
+        tkns_2 = tokenize(preprocess_sentence(s2))
+
+        pos_tags_1 = get_pos_tags(tkns_1)
+        pos_tags_2 = get_pos_tags(tkns_2)
+
+        synsets_1 = get_synsets(tkns_1, pos_tags_1)
+        synsets_2 = get_synsets(tkns_2, pos_tags_2)
+
+        score, count = 0.0, 0
+
+        # For each word in the first sentence
+        if len(synsets_1) & len(synsets_2) > 0:
+            i = 0
+            for synset_1 in synsets_1:
+
+                # Get the similarity value of the most similar word in the other sentence
+                if similarity == "path":
+                    best_score = max([synset_1.path_similarity(synset_2) for synset_2 in synsets_2])
+                elif similarity == "lch":
+                    best_score = max([lch_similarity(synset_1, synset_2) for synset_2 in synsets_2])
+                elif similarity == "wup":
+                    best_score = max([wup_similarity(synset_1, synset_2) for synset_2 in synsets_2])
+                elif similarity == "lin":
+                    best_score = max([lin_similarity(synset_1, synset_2) for synset_2 in synsets_2])
+                else:
+                    best_score = None
+                    print("Incorrect synset similarity")
+
+                # Check that the similarity could have been computed
+                if best_score is not None:
+                    score += best_score
+                    count += 1
+
+                i += 1
+
+        # Average the values
+        if count > 0:
+            score /= count
+        else:
+            score = 0
+        sim_arr[idx] = score
+
+    return sim_arr
+
+
+def synset_stopwords_similarity(s_df, similarity="path"):
+    """
+        Calculates the synset similarity for the pair of sentences.
+
+        Transformations:
+            - Preprocessing.
+            - Tokenizing.
             - Stopword removal.
             - POS tag.
             - Synset
@@ -286,37 +357,29 @@ def synset_similarity(s_df, similarity="path"):
 
         tkns_1 = remove_stopwords(tokenize(preprocess_sentence(s1)))
         tkns_2 = remove_stopwords(tokenize(preprocess_sentence(s2)))
-        print(tkns_1)
-        print(tkns_2)
 
-        pos_tag_1 = get_pos_tags(tkns_1)
-        pos_tag_2 = get_pos_tags(tkns_2)
-        print(pos_tag_1)
-        print(pos_tag_2)
+        pos_tags_1 = get_pos_tags(tkns_1)
+        pos_tags_2 = get_pos_tags(tkns_2)
 
-        synsets_1, pos_tags_1 = get_synsets(tkns_1, pos_tag_1)
-        synsets_2, pos_tags_2 = get_synsets(tkns_2, pos_tag_2)
-        print(synsets_1)
-        print(synsets_2)
-        print(pos_tags_1)
-        print(pos_tags_2)
+        synsets_1 = get_synsets(tkns_1, pos_tags_1)
+        synsets_2 = get_synsets(tkns_2, pos_tags_2)
 
         score, count = 0.0, 0
 
         # For each word in the first sentence
         if len(synsets_1) & len(synsets_2) > 0:
             i = 0
-            for synset in synsets_1:
+            for synset_1 in synsets_1:
 
                 # Get the similarity value of the most similar word in the other sentence
                 if similarity == "path":
-                    best_score = max([synset.path_similarity(ss) for ss in synsets_2])
+                    best_score = max([synset_1.path_similarity(synset_2) for synset_2 in synsets_2])
                 elif similarity == "lch":
-                    best_score = max([lch_similarity(synset, ss, pos_tags_1[i], pos) for ss, pos in zip(synsets_2, pos_tags_2)])
+                    best_score = max([lch_similarity(synset_1, synset_2) for synset_2 in synsets_2])
                 elif similarity == "wup":
-                    best_score = max([synset.wup_similarity(ss) for ss in synsets_2])
+                    best_score = max([wup_similarity(synset_1, synset_2) for synset_2 in synsets_2])
                 elif similarity == "lin":
-                    best_score = max([lin_similarity(synset, ss, pos_tags_1[i], pos) for ss, pos in zip(synsets_2, pos_tags_2)])
+                    best_score = max([lin_similarity(synset_1, synset_2) for synset_2 in synsets_2])
                 else:
                     best_score = None
                     print("Incorrect synset similarity")
@@ -349,39 +412,62 @@ def get_all_features(s_df):
         A 2D numpy array where each column contains similarity values for all sentence pairs.
     """
 
-    feat_arr = np.empty(shape=(len(s_df), 26))
+    feat_arr_list = []
 
-    feat_arr[:, 0] = preprocessed_tokens_set_similarity(s_df, similarity="jaccard")
-    feat_arr[:, 1] = preprocessed_tokens_set_similarity(s_df, similarity="dice")
-    feat_arr[:, 2] = preprocessed_tokens_set_similarity(s_df, similarity="over")
-    feat_arr[:, 3] = preprocessed_tokens_set_similarity(s_df, similarity="cosine")
+    print("preprocessed_tokens_set_similarity")
 
-    feat_arr[:, 4] = preprocessed_tokens_stopwords_set_similarity(s_df, similarity="jaccard")
-    feat_arr[:, 5] = preprocessed_tokens_stopwords_set_similarity(s_df, similarity="dice")
-    feat_arr[:, 6] = preprocessed_tokens_stopwords_set_similarity(s_df, similarity="over")
-    feat_arr[:, 7] = preprocessed_tokens_stopwords_set_similarity(s_df, similarity="cosine")
+    feat_arr_list.append(preprocessed_tokens_set_similarity(s_df, similarity="jaccard"))
+    feat_arr_list.append(preprocessed_tokens_set_similarity(s_df, similarity="dice"))
+    feat_arr_list.append(preprocessed_tokens_set_similarity(s_df, similarity="over"))
+    feat_arr_list.append(preprocessed_tokens_set_similarity(s_df, similarity="cosine"))
 
-    feat_arr[:, 8] = lemmas_set_similarity(s_df, similarity="jaccard")
-    feat_arr[:, 9] = lemmas_set_similarity(s_df, similarity="dice")
-    feat_arr[:, 10] = lemmas_set_similarity(s_df, similarity="over")
-    feat_arr[:, 11] = lemmas_set_similarity(s_df, similarity="cosine")
+    print("preprocessed_tokens_stopwords_set_similarity")
 
-    feat_arr[:, 12] = lemmas_stopwords_set_similarity(s_df, similarity="jaccard")
-    feat_arr[:, 13] = lemmas_stopwords_set_similarity(s_df, similarity="dice")
-    feat_arr[:, 14] = lemmas_stopwords_set_similarity(s_df, similarity="over")
-    feat_arr[:, 15] = lemmas_stopwords_set_similarity(s_df, similarity="cosine")
+    feat_arr_list.append(preprocessed_tokens_stopwords_set_similarity(s_df, similarity="jaccard"))
+    feat_arr_list.append(preprocessed_tokens_stopwords_set_similarity(s_df, similarity="dice"))
+    feat_arr_list.append(preprocessed_tokens_stopwords_set_similarity(s_df, similarity="over"))
+    feat_arr_list.append(preprocessed_tokens_stopwords_set_similarity(s_df, similarity="cosine"))
 
-    feat_arr[:, 16] = ngram_overlap(s_df, 1)
-    feat_arr[:, 17] = ngram_overlap(s_df, 2)
-    feat_arr[:, 18] = ngram_overlap(s_df, 3)
+    print("lemmas_set_similarity")
 
-    feat_arr[:, 19] = ngram_stopwords_overlap(s_df, 1)
-    feat_arr[:, 20] = ngram_stopwords_overlap(s_df, 2)
-    feat_arr[:, 21] = ngram_stopwords_overlap(s_df, 3)
+    feat_arr_list.append(lemmas_set_similarity(s_df, similarity="jaccard"))
+    feat_arr_list.append(lemmas_set_similarity(s_df, similarity="dice"))
+    feat_arr_list.append(lemmas_set_similarity(s_df, similarity="over"))
+    feat_arr_list.append(lemmas_set_similarity(s_df, similarity="cosine"))
 
-    feat_arr[:, 22] = synset_similarity(s_df, similarity="path")
-    feat_arr[:, 23] = synset_similarity(s_df, similarity="lch")
-    feat_arr[:, 24] = synset_similarity(s_df, similarity="wup")
-    feat_arr[:, 25] = synset_similarity(s_df, similarity="lin")
+    print("lemmas_stopwords_set_similarity")
+
+    feat_arr_list.append(lemmas_stopwords_set_similarity(s_df, similarity="jaccard"))
+    feat_arr_list.append(lemmas_stopwords_set_similarity(s_df, similarity="dice"))
+    feat_arr_list.append(lemmas_stopwords_set_similarity(s_df, similarity="over"))
+    feat_arr_list.append(lemmas_stopwords_set_similarity(s_df, similarity="cosine"))
+
+    print("ngram_overlap")
+
+    feat_arr_list.append(ngram_overlap(s_df, 1))
+    feat_arr_list.append(ngram_overlap(s_df, 2))
+    feat_arr_list.append(ngram_overlap(s_df, 3))
+
+    print("ngram_stopwords_overlap")
+
+    feat_arr_list.append(ngram_stopwords_overlap(s_df, 1))
+    feat_arr_list.append(ngram_stopwords_overlap(s_df, 2))
+    feat_arr_list.append(ngram_stopwords_overlap(s_df, 3))
+
+    print("synset_similarity")
+
+    feat_arr_list.append(synset_similarity(s_df, similarity="path"))
+    feat_arr_list.append(synset_similarity(s_df, similarity="lch"))
+    feat_arr_list.append(synset_similarity(s_df, similarity="wup"))
+    feat_arr_list.append(synset_similarity(s_df, similarity="lin"))
+
+    print("synset_stopwords_similarity")
+
+    feat_arr_list.append(synset_stopwords_similarity(s_df, similarity="path"))
+    feat_arr_list.append(synset_stopwords_similarity(s_df, similarity="lch"))
+    feat_arr_list.append(synset_stopwords_similarity(s_df, similarity="wup"))
+    feat_arr_list.append(synset_stopwords_similarity(s_df, similarity="lin"))
+
+    feat_arr = np.concatenate(feat_arr_list)
 
     return feat_arr
