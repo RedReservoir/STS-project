@@ -468,6 +468,8 @@ def get_all_features(s_df):
     feat_arr_list.append(synset_stopwords_similarity(s_df, similarity="wup"))
     feat_arr_list.append(synset_stopwords_similarity(s_df, similarity="lin"))
 
-    feat_arr = np.concatenate(feat_arr_list)
+    #feat_arr = np.concatenate(feat_arr_list)
+    feat_arr_list = np.array(feat_arr_list)
+    feat_arr_df = pd.DataFrame(feat_arr_list.T)
 
-    return feat_arr
+    return feat_arr_df
