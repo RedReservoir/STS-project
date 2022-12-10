@@ -1,12 +1,12 @@
 import numpy as np
 import pandas as pd
 
-from transform.preprocess import *
-from transform.pos_lemmas import *
-from transform.synsets import *
+from src.transform.preprocess import *
+from src.transform.pos_lemmas import *
+from src.transform.synsets import *
 
-from utils.set_similarities import *
-from utils.synset_similarities import *
+from src.utils.set_similarities import *
+from src.utils.synset_similarities import *
 
 
 def preprocessed_tokens_set_similarity(s_df, similarity="jaccard"):
