@@ -37,8 +37,7 @@ class SupportVectorRegressorModel:
         )
 
         with warnings.catch_warnings():
-            warnings.filterwarnings("ignore", message="correlation coefficient")
-
+            warnings.simplefilter("ignore")
             self.svr = CV_svr.fit(X, y)
 
 

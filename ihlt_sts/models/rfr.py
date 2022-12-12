@@ -34,7 +34,7 @@ class RandomForestRegressorModel:
     def predict(self, X):
 
         if self.rfr is None:
-            raise ValueError("RandomForestRegressorModel.fit() must be called before RandomForestRegressorModel.predict()")
+            raise ValueError("RandomForestRegressorModel.fit() must be called")
 
         y_pred = self.rfr.predict(X)
 
@@ -44,6 +44,6 @@ class RandomForestRegressorModel:
     def get_best_params(self):
 
         if self.rfr is None:
-            raise ValueError("RandomForestRegressorModel.fit() must be called before RandomForestRegressorModel.predict()")
+            raise ValueError("RandomForestRegressorModel.fit() must be called")
 
         return self.rfr.best_params_
