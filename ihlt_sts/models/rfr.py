@@ -35,7 +35,8 @@ class RandomForestRegressorModel:
             estimator=rfr,
             param_grid=param_grid_rfr,
             scoring=pearson_scorer,
-            cv=5
+            cv=5,
+            verbose=2
         )
 
         self.rfr = CV_rfr.fit(X, y)

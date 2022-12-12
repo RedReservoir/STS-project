@@ -42,7 +42,8 @@ class SupportVectorRegressorModel:
         CV_svr = GridSearchCV(
             estimator=svr,
             param_grid=svr_param,
-            scoring=pearson_scorer
+            scoring=pearson_scorer,
+            verbose=2
         )
 
         with warnings.catch_warnings():
