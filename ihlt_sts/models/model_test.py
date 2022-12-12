@@ -39,3 +39,11 @@ class RandomForestModel:
         y_pred = self.rfr.predict(X)
 
         return y_pred
+
+
+    def get_best_params(self):
+
+        if self.rfr is None:
+            raise ValueError("RandomForestModel.fit() must be called before RandomForestModel.predict()")
+
+        return self.rfr.best_params_
