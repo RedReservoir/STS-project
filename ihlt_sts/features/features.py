@@ -39,9 +39,9 @@ def get_lexical_features(s_df):
     return feat_df
 
 
-def get_syntactical_features(s_df):
+def get_syntactic_features(s_df):
     """
-    Calculates all (syntactical) features on sentence sets.
+    Calculates all (syntactic) features on sentence sets.
 
     :param s_df: pd.DataFrame
         Sentence pairs DataFrame.
@@ -74,7 +74,7 @@ def get_all_features(s_df):
 
     feat_df_list = [
         get_lexical_features(s_df),
-        get_syntactical_features(s_df)
+        get_syntactic_features(s_df)
     ]
 
     feat_df = pd.concat(feat_df_list, axis=1)
