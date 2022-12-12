@@ -4,7 +4,7 @@ from scipy.stats import pearsonr
 from sklearn.metrics import make_scorer
 
 
-class RandomForestModel:
+class RandomForestRegressorModel:
 
 
     def __init__(self):
@@ -34,7 +34,7 @@ class RandomForestModel:
     def predict(self, X):
 
         if self.rfr is None:
-            raise ValueError("RandomForestModel.fit() must be called before RandomForestModel.predict()")
+            raise ValueError("RandomForestRegressorModel.fit() must be called before RandomForestRegressorModel.predict()")
 
         y_pred = self.rfr.predict(X)
 
@@ -44,6 +44,6 @@ class RandomForestModel:
     def get_best_params(self):
 
         if self.rfr is None:
-            raise ValueError("RandomForestModel.fit() must be called before RandomForestModel.predict()")
+            raise ValueError("RandomForestRegressorModel.fit() must be called before RandomForestRegressorModel.predict()")
 
         return self.rfr.best_params_

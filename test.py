@@ -1,4 +1,4 @@
-from ihlt_sts.models.model_test import RandomForestModel
+from ihlt_sts.models.rfr import RandomForestModel
 from ihlt_sts.data.semeval import load_train_data, load_test_data
 from features.features import get_all_features
 
