@@ -11,7 +11,7 @@ class FullyConvolutionalNeuralNetworkModel:
         self.history = None
 
 
-    def fit(self, X, y):
+    def fit(self, X, y, epochs=100, validation_split=0.1):
 
         self.fcnn = Sequential()
         self.fcnn.add(Dense(64, input_shape=(32,), kernel_initializer='normal', activation='relu'))
@@ -21,7 +21,7 @@ class FullyConvolutionalNeuralNetworkModel:
         self.fcnn.add(Dense(1, kernel_initializer='normal', activation='linear'))
 
         self.fcnn.compile(loss='mean_squared_error', optimizer='adam')
-        self.history = self.fcnn.fit(X, y, epochs=100, validation_split=0.1)
+        self.history = self.fcnn.fit(X, y, epochs=epochs, validation_split=validation_split)
 
 
     def predict(self, X):
