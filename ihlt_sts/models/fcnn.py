@@ -29,7 +29,7 @@ class FullyConvolutionalNeuralNetworkModel:
         if self.fcnn is None:
             raise ValueError("FullyConvolutionalNeuralNetworkModel.fit() must be called")
 
-        y_pred = self.fcnn.predict(X).flatten()
+        y_pred = self.fcnn.predict(X, verbose=0).flatten()
 
         return y_pred
 
