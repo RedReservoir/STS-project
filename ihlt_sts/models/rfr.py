@@ -18,7 +18,7 @@ class RandomForestRegressorModel:
             n_estimators_list = [200, 300, 500]
 
         if max_depth_list is None:
-            max_depth_list = [6, 7, 8]
+            max_depth_list = [9, 10, 11, 12]
 
         param_grid_rfr = {
             'n_estimators': n_estimators_list,
