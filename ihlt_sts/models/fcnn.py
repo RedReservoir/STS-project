@@ -14,7 +14,7 @@ class FullyConvolutionalNeuralNetworkModel:
     def fit(self, X, y, epochs=100, validation_split=0.1):
 
         self.fcnn = Sequential()
-        self.fcnn.add(Dense(64, input_shape=(32,), kernel_initializer='normal', activation='relu'))
+        self.fcnn.add(Dense(64, input_shape=(X.shape[1],), kernel_initializer='normal', activation='relu'))
         self.fcnn.add(Dense(32, kernel_initializer='normal', activation='relu'))
         self.fcnn.add(Dense(16, kernel_initializer='normal', activation='relu'))
         self.fcnn.add(Dense(8, kernel_initializer='normal', activation='relu'))
