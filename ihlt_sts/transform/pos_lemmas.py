@@ -2,6 +2,7 @@ import nltk
 from nltk.corpus import wordnet as wn
 from nltk.util import ngrams
 
+
 # Prepare common variables
 
 wnl = nltk.stem.WordNetLemmatizer()
