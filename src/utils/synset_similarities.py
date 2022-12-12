@@ -56,6 +56,18 @@ def wup_similarity(syn_1, syn_2):
 
 
 def lch_similarity(syn_1, syn_2):
+    """
+    Calculates the Leacock-Chodorow similarity between two synsets.
+    Wrapper for the nltk.corpus.wordnet.Synset Leacock-Chodorow similarity implementation.
+
+    :param syn_1: nltk.corpus.wordnet.Synset
+        First synset.
+    :param syn_2: nltk.corpus.wordnet.Synset
+        Second synset.
+
+    :return: float
+        Value of the Leacock-Chodorow similarity.
+    """
 
     if syn_1.pos() == syn_2.pos():
         sim = syn_1.lch_similarity(syn_2)
@@ -66,6 +78,18 @@ def lch_similarity(syn_1, syn_2):
 
 
 def lin_similarity(syn_1, syn_2):
+    """
+    Calculates the Lin similarity between two synsets.
+    Wrapper for the nltk.corpus.wordnet.Synset Lin similarity implementation.
+
+    :param syn_1: nltk.corpus.wordnet.Synset
+        First synset.
+    :param syn_2: nltk.corpus.wordnet.Synset
+        Second synset.
+
+    :return: float
+        Value of the Lin similarity.
+    """
 
     if syn_1.pos() == syn_2.pos():
         try:

@@ -62,4 +62,5 @@ def cos_sim(s1, s2):
     :return: float
         Similarity value.
     """
+
     return len(s1 & s2) / sqrt(len(s1) * len(s2))

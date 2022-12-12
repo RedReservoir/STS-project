@@ -408,67 +408,50 @@ def get_all_features(s_df):
     :param s_df: pd.DataFrame
         Sentence pairs DataFrame.
 
-    :return: np.ndarray
-        A 2D numpy array where each column contains similarity values for all sentence pairs.
+    :return: pd.DataFrame
+        A DataFrame where each row contains the features for each sentence pair.
     """
 
     feat_arr_list = []
-
-    print("preprocessed_tokens_set_similarity")
 
     feat_arr_list.append(preprocessed_tokens_set_similarity(s_df, similarity="jaccard"))
     feat_arr_list.append(preprocessed_tokens_set_similarity(s_df, similarity="dice"))
     feat_arr_list.append(preprocessed_tokens_set_similarity(s_df, similarity="over"))
     feat_arr_list.append(preprocessed_tokens_set_similarity(s_df, similarity="cosine"))
 
-    print("preprocessed_tokens_stopwords_set_similarity")
-
     feat_arr_list.append(preprocessed_tokens_stopwords_set_similarity(s_df, similarity="jaccard"))
     feat_arr_list.append(preprocessed_tokens_stopwords_set_similarity(s_df, similarity="dice"))
     feat_arr_list.append(preprocessed_tokens_stopwords_set_similarity(s_df, similarity="over"))
     feat_arr_list.append(preprocessed_tokens_stopwords_set_similarity(s_df, similarity="cosine"))
-
-    print("lemmas_set_similarity")
 
     feat_arr_list.append(lemmas_set_similarity(s_df, similarity="jaccard"))
     feat_arr_list.append(lemmas_set_similarity(s_df, similarity="dice"))
     feat_arr_list.append(lemmas_set_similarity(s_df, similarity="over"))
     feat_arr_list.append(lemmas_set_similarity(s_df, similarity="cosine"))
 
-    print("lemmas_stopwords_set_similarity")
-
     feat_arr_list.append(lemmas_stopwords_set_similarity(s_df, similarity="jaccard"))
     feat_arr_list.append(lemmas_stopwords_set_similarity(s_df, similarity="dice"))
     feat_arr_list.append(lemmas_stopwords_set_similarity(s_df, similarity="over"))
     feat_arr_list.append(lemmas_stopwords_set_similarity(s_df, similarity="cosine"))
 
-    print("ngram_overlap")
-
     feat_arr_list.append(ngram_overlap(s_df, 1))
     feat_arr_list.append(ngram_overlap(s_df, 2))
     feat_arr_list.append(ngram_overlap(s_df, 3))
 
-    print("ngram_stopwords_overlap")
-
     feat_arr_list.append(ngram_stopwords_overlap(s_df, 1))
     feat_arr_list.append(ngram_stopwords_overlap(s_df, 2))
     feat_arr_list.append(ngram_stopwords_overlap(s_df, 3))
-
-    print("synset_similarity")
 
     feat_arr_list.append(synset_similarity(s_df, similarity="path"))
     feat_arr_list.append(synset_similarity(s_df, similarity="lch"))
     feat_arr_list.append(synset_similarity(s_df, similarity="wup"))
     feat_arr_list.append(synset_similarity(s_df, similarity="lin"))
 
-    print("synset_stopwords_similarity")
-
     feat_arr_list.append(synset_stopwords_similarity(s_df, similarity="path"))
     feat_arr_list.append(synset_stopwords_similarity(s_df, similarity="lch"))
     feat_arr_list.append(synset_stopwords_similarity(s_df, similarity="wup"))
     feat_arr_list.append(synset_stopwords_similarity(s_df, similarity="lin"))
 
-    #feat_arr = np.concatenate(feat_arr_list)
     feat_arr_list = np.array(feat_arr_list)
     feat_arr_df = pd.DataFrame(feat_arr_list.T)
 
