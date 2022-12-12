@@ -12,23 +12,44 @@ class RandomForestRegressorModel:
         self.rfr = None
 
 
-    def fit(self, X, y):
+    def fit_search(self, X, y, n_estimators_list=None, max_depth_list=None):
+
+        if n_estimators_list is None:
+            n_estimators_list = [200, 300, 500]
+
+        if max_depth_list is None:
+            max_depth_list = [6, 7, 8]
 
         param_grid_rfr = {
-            'n_estimators': [200, 300, 500],
-            'max_depth': [6, 7, 8]
+            'n_estimators': n_estimators_list,
+            'max_depth': max_depth_list
         }
 
         pearson_scorer = make_scorer(lambda y_true, y_pred: pearsonr(y_true, y_pred)[0])
 
+        rfr = RandomForestRegressor(
+            criterion="squared_error"
+        )
+
         CV_rfr = GridSearchCV(
-            estimator=RandomForestRegressor(criterion="squared_error"),
+            estimator=rfr,
             param_grid=param_grid_rfr,
             scoring=pearson_scorer,
             cv=5
         )
 
         self.rfr = CV_rfr.fit(X, y)
+
+
+    def fit(self, X, y, n_estimators, max_depth):
+
+        self.rfr = RandomForestRegressor(
+            criterion="squared_error",
+            n_estimators=n_estimators,
+            max_depth=max_depth
+        )
+
+        self.rfr = self.rfr.fit(X, y)
 
 
     def predict(self, X):
