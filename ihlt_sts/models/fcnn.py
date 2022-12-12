@@ -21,7 +21,7 @@ class FullyConvolutionalNeuralNetworkModel:
         self.fcnn.add(Dense(1, kernel_initializer='normal', activation='linear'))
 
         self.fcnn.compile(loss='mean_squared_error', optimizer='adam')
-        self.history = self.fcnn.fit(X, y, epochs=100, validation_split=0.1)
+        self.history = self.fcnn.fit(X, y, epochs=100, validation_split=0.1, verbose=0)
 
 
     def predict(self, X):
@@ -29,7 +29,7 @@ class FullyConvolutionalNeuralNetworkModel:
         if self.fcnn is None:
             raise ValueError("FullyConvolutionalNeuralNetworkModel.fit() must be called")
 
-        y_pred = self.fcnn.predict(X)
+        y_pred = self.fcnn.predict(X).flatten()
 
         return y_pred
 
