@@ -21,7 +21,7 @@ class FullyConvolutionalNeuralNetworkModel:
         self.fcnn.add(Dense(1, kernel_initializer='normal', activation='linear'))
 
         self.fcnn.compile(loss='mean_squared_error', optimizer='adam')
-        self.history = self.fcnn.fit_search(X, y, epochs=100, validation_split=0.1, verbose=0)
+        self.history = self.fcnn.fit(X, y, epochs=100, validation_split=0.1)
 
 
     def predict(self, X):
