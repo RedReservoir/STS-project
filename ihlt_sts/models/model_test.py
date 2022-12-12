@@ -14,8 +14,6 @@ class RandomForestModel:
 
     def fit(self, X, y):
 
-        # Instantiate model and find best parameters
-
         param_grid_rfr = {
             'n_estimators': [200, 300, 500],
             'max_depth': [6, 7, 8]
@@ -30,11 +28,7 @@ class RandomForestModel:
             cv=5
         )
 
-        CV_rfr.fit(X, y)
-
-        self.rfr = RandomForestRegressor(criterion="squared_error", **CV_rfr.get_params())
-
-        self.rfr.fit(X, y)
+        self.rfr = CV_rfr.fit(X, y)
 
 
     def predict(self, X):
@@ -45,4 +39,3 @@ class RandomForestModel:
         y_pred = self.rfr.predict(X)
 
         return y_pred
-
