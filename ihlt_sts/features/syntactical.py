@@ -51,9 +51,8 @@ def synset_similarity(s_df, synset_sim="path"):
         synsets_1 = get_synsets(tkns_1, pos_tags_1)
         synsets_2 = get_synsets(tkns_2, pos_tags_2)
 
-        score, count = 0.0, 0
-
         # For each word in the first sentence
+        score, count = 0.0, 0
         if len(synsets_1) & len(synsets_2) > 0:
             i = 0
             for synset_1 in synsets_1:
@@ -81,7 +80,41 @@ def synset_similarity(s_df, synset_sim="path"):
             score /= count
         else:
             score = 0
+
         sim_arr[idx] = score
+
+        # For each word in the second sentence
+        score, count = 0.0, 0
+        if len(synsets_1) & len(synsets_2) > 0:
+            i = 0
+            for synset_2 in synsets_2:
+
+                # Get the similarity value of the most similar word in the other sentence
+                best_score = None
+                if synset_sim == "path":
+                    best_score = max([synset_2.path_similarity(synset_1) for synset_1 in synsets_1])
+                elif synset_sim == "lch":
+                    best_score = max([lch_similarity(synset_2, synset_1) for synset_1 in synsets_1])
+                elif synset_sim == "wup":
+                    best_score = max([wup_similarity(synset_2, synset_1) for synset_1 in synsets_1])
+                elif synset_sim == "lin":
+                    best_score = max([lin_similarity(synset_2, synset_1) for synset_1 in synsets_1])
+
+                # Check that the similarity could have been computed
+                if best_score is not None:
+                    score += best_score
+                    count += 1
+
+                i += 1
+
+        # Average the values
+        if count > 0:
+            score /= count
+        else:
+            score = 0
+
+        sim_arr[idx] += score
+        sim_arr[idx] /= 2
 
     return sim_arr
 
@@ -129,9 +162,8 @@ def synset_stopwords_similarity(s_df, synset_sim="path"):
         synsets_1 = get_synsets(tkns_1, pos_tags_1)
         synsets_2 = get_synsets(tkns_2, pos_tags_2)
 
-        score, count = 0.0, 0
-
         # For each word in the first sentence
+        score, count = 0.0, 0
         if len(synsets_1) & len(synsets_2) > 0:
             i = 0
             for synset_1 in synsets_1:
@@ -159,6 +191,40 @@ def synset_stopwords_similarity(s_df, synset_sim="path"):
             score /= count
         else:
             score = 0
+
         sim_arr[idx] = score
+
+        # For each word in the second sentence
+        score, count = 0.0, 0
+        if len(synsets_1) & len(synsets_2) > 0:
+            i = 0
+            for synset_2 in synsets_2:
+
+                # Get the similarity value of the most similar word in the other sentence
+                best_score = None
+                if synset_sim == "path":
+                    best_score = max([synset_2.path_similarity(synset_1) for synset_1 in synsets_1])
+                elif synset_sim == "lch":
+                    best_score = max([lch_similarity(synset_2, synset_1) for synset_1 in synsets_1])
+                elif synset_sim == "wup":
+                    best_score = max([wup_similarity(synset_2, synset_1) for synset_1 in synsets_1])
+                elif synset_sim == "lin":
+                    best_score = max([lin_similarity(synset_2, synset_1) for synset_1 in synsets_1])
+
+                # Check that the similarity could have been computed
+                if best_score is not None:
+                    score += best_score
+                    count += 1
+
+                i += 1
+
+        # Average the values
+        if count > 0:
+            score /= count
+        else:
+            score = 0
+
+        sim_arr[idx] += score
+        sim_arr[idx] /= 2
 
     return sim_arr
