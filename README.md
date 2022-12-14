@@ -27,7 +27,7 @@ from ihlt_sts.features.features import get_lexical_features, get_syntactic_featu
 
 from ihlt_sts.models.rfr import RandomForestRegressorModel
 from ihlt_sts.models.svr import SupportVectorRegressorModel
-from ihlt_sts.models.fcnn import FullyConvolutionalNeuralNetworkModel
+from ihlt_sts.models.fcnn import FullyConnectedNeuralNetworkModel
 ```
 
 ### Contents

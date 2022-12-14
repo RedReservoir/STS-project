@@ -2,7 +2,7 @@ from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense
 
 
-class FullyConvolutionalNeuralNetworkModel:
+class FullyConnectedNeuralNetworkModel:
     """
     Wrapper class around keras-built Sequential Neural Networks.
     """
@@ -53,7 +53,7 @@ class FullyConvolutionalNeuralNetworkModel:
         """
 
         if self.fcnn is None:
-            raise ValueError("FullyConvolutionalNeuralNetworkModel.fit() must be called")
+            raise ValueError("FullyConnectedNeuralNetworkModel.fit() must be called")
 
         y_pred = self.fcnn.predict(X, verbose=0).flatten()
 
@@ -69,7 +69,7 @@ class FullyConvolutionalNeuralNetworkModel:
         """
 
         if self.fcnn is None:
-            raise ValueError("FullyConvolutionalNeuralNetworkModel.fit() must be called")
+            raise ValueError("FullyConnectedNeuralNetworkModel.fit() must be called")
 
         return self.history
 
@@ -80,6 +80,6 @@ class FullyConvolutionalNeuralNetworkModel:
         """
 
         if self.fcnn is None:
-            raise ValueError("FullyConvolutionalNeuralNetworkModel.fit() must be called")
+            raise ValueError("FullyConnectedNeuralNetworkModel.fit() must be called")
 
         self.fcnn.summary()
