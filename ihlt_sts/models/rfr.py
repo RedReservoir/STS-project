@@ -69,3 +69,11 @@ class RandomForestRegressorModel:
             raise ValueError("RandomForestRegressorModel.fit() must be called")
 
         return self.rfr.best_params_
+
+
+    def get_feature_importances(self):
+
+        if self.rfr is None:
+            raise ValueError("RandomForestRegressorModel.fit() must be called")
+
+        return self.rfr.feature_importances_
