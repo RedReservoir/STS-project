@@ -3,7 +3,9 @@ from tensorflow.keras.layers import Dense
 
 
 class FullyConvolutionalNeuralNetworkModel:
-
+    """
+    Wrapper class around keras-built Sequential Neural Networks.
+    """
 
     def __init__(self):
 
@@ -12,6 +14,21 @@ class FullyConvolutionalNeuralNetworkModel:
 
 
     def fit(self, X, y, epochs=100, validation_split=0.1):
+        """
+        Creates the neural network and trains it.
+        GD is used with ADAM optimizer. Loss function is MSE.
+
+        :param X: np.ndarray
+            2D numpy array with the train data features to train with.
+        :param y: np.ndarray
+            1D numpy array with the train data target values.
+        :param epochs: int, optional
+            Number of epochs to train the neural network for.
+            Default is 100 epochs.
+        :param validation_split: float, optional
+            Percentage of the train data to use for validation.
+            Default is 0.1 (10%).
+        """
 
         self.fcnn = Sequential()
         self.fcnn.add(Dense(64, input_shape=(X.shape[1],), kernel_initializer='normal', activation='relu'))
@@ -25,6 +42,15 @@ class FullyConvolutionalNeuralNetworkModel:
 
 
     def predict(self, X):
+        """
+        Predicts regression target values.
+
+        :param X: np.ndarray
+            2D numpy array with the train data features to predict with.
+
+        :return: np.ndarray
+            1D numpy array with the predicted values.
+        """
 
         if self.fcnn is None:
             raise ValueError("FullyConvolutionalNeuralNetworkModel.fit() must be called")
@@ -35,6 +61,12 @@ class FullyConvolutionalNeuralNetworkModel:
 
 
     def get_history(self):
+        """
+        Getter for the neural network training history.
+
+        :return: History
+            The neural network training history.
+        """
 
         if self.fcnn is None:
             raise ValueError("FullyConvolutionalNeuralNetworkModel.fit() must be called")
@@ -43,6 +75,9 @@ class FullyConvolutionalNeuralNetworkModel:
 
 
     def print_summary(self):
+        """
+        Prints the neural network summary.
+        """
 
         if self.fcnn is None:
             raise ValueError("FullyConvolutionalNeuralNetworkModel.fit() must be called")

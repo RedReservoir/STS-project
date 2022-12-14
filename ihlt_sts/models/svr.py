@@ -9,6 +9,9 @@ import warnings
 
 
 class SupportVectorRegressorModel:
+    """
+    Wrapper class around the SVR (Support Vector Regressor) from sklearn.
+    """
 
 
     def __init__(self):
@@ -17,6 +20,20 @@ class SupportVectorRegressorModel:
 
 
     def fit_search(self, X, y, gamma_list=None, C_list=None, epsilon_list=None):
+        """
+        Searches the best parameters for the model.
+
+        :param X: np.ndarray
+            2D numpy array with the train data features to train with.
+        :param y: np.ndarray
+            1D numpy array with the train data target values.
+        :param gamma_list: list, optional
+            Values of parameter `gamma` to try.
+        :param C_list: list, optional
+            Values of parameter `C` to try.
+        :param epsilon_list: list, optional
+            Values of parameter `epsilon` to try.
+        """
 
         if gamma_list is None:
             gamma_list = np.logspace(-6, -1, 6)
@@ -52,6 +69,20 @@ class SupportVectorRegressorModel:
 
 
     def fit(self, X, y, gamma, C, epsilon):
+        """
+        Searches the best parameters for the model.
+
+        :param X: np.ndarray
+            2D numpy array with the train data features to train with.
+        :param y: np.ndarray
+            1D numpy array with the train data target values.
+        :param gamma: float
+            Value of parameter `gamma` to pass to SVR.
+        :param C: float
+            Value of parameter `C` to pass to SVR.
+        :param epsilon: float
+            Value of parameter `epsilon` to pass to SVR.
+        """
 
         self.svr = SVR(
             kernel='rbf',
@@ -66,6 +97,15 @@ class SupportVectorRegressorModel:
 
 
     def predict(self, X):
+        """
+        Predicts regression target values.
+
+        :param X: np.ndarray
+            2D numpy array with the train data features to predict with.
+
+        :return: np.ndarray
+            1D numpy array with the predicted values.
+        """
 
         if self.svr is None:
             raise ValueError("SupportVectorRegressorModel.fit() must be called before SupportVectorRegressorModel.predict()")
@@ -76,6 +116,12 @@ class SupportVectorRegressorModel:
 
 
     def get_best_params(self):
+        """
+        Returns the best parameters for the model.
+
+        :return: dict
+            Dictionary with the best SVR parameters.
+        """
 
         if self.svr is None:
             raise ValueError("SupportVectorRegressorModel.fit() must be called before SupportVectorRegressorModel.predict()")

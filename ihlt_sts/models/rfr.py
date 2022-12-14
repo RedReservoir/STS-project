@@ -5,7 +5,9 @@ from sklearn.metrics import make_scorer
 
 
 class RandomForestRegressorModel:
-
+    """
+    Wrapper class around the RandomForestRegressor from sklearn.
+    """
 
     def __init__(self):
 
@@ -13,6 +15,18 @@ class RandomForestRegressorModel:
 
 
     def fit_search(self, X, y, n_estimators_list=None, max_depth_list=None):
+        """
+        Searches the best parameters for the model.
+
+        :param X: np.ndarray
+            2D numpy array with the train data features to train with.
+        :param y: np.ndarray
+            1D numpy array with the train data target values.
+        :param n_estimators_list: list, optional
+            Values of parameter `n_estimator` to try.
+        :param max_depth_list: list, optional
+            Values of parameter `max_depth` to try.
+        """
 
         if n_estimators_list is None:
             n_estimators_list = [200, 300, 500]
@@ -43,6 +57,18 @@ class RandomForestRegressorModel:
 
 
     def fit(self, X, y, n_estimators, max_depth):
+        """
+        Searches the best parameters for the model.
+
+        :param X: np.ndarray
+            2D numpy array with the train data features to train with.
+        :param y: np.ndarray
+            1D numpy array with the train data target values.
+        :param n_estimators: int
+            Value of parameter `n_estimator` to pass to RandomForestRegressor.
+        :param max_depth: int
+            Value of parameter `max_depth` to pass to RandomForestRegressor.
+        """
 
         self.rfr = RandomForestRegressor(
             criterion="squared_error",
@@ -54,6 +80,15 @@ class RandomForestRegressorModel:
 
 
     def predict(self, X):
+        """
+        Predicts regression target values.
+
+        :param X: np.ndarray
+            2D numpy array with the train data features to predict with.
+
+        :return: np.ndarray
+            1D numpy array with the predicted values.
+        """
 
         if self.rfr is None:
             raise ValueError("RandomForestRegressorModel.fit() must be called")
@@ -64,6 +99,12 @@ class RandomForestRegressorModel:
 
 
     def get_best_params(self):
+        """
+        Returns the best parameters for the model.
+
+        :return: dict
+            Dictionary with the best RandomForestRegressor parameters.
+        """
 
         if self.rfr is None:
             raise ValueError("RandomForestRegressorModel.fit() must be called")
@@ -72,6 +113,14 @@ class RandomForestRegressorModel:
 
 
     def get_feature_importances(self):
+        """
+        Returns the feature importance values of the model.
+
+        :return: np.ndarray
+            1D array with the feature importances.
+            Array values corresponf to features in the same order they were fed
+                to the model when calling `RandomForestRegressorModel.fit()`.
+        """
 
         if self.rfr is None:
             raise ValueError("RandomForestRegressorModel.fit() must be called")
