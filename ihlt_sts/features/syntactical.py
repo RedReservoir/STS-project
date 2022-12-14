@@ -1,11 +1,9 @@
 import numpy as np
-import pandas as pd
 
 from ihlt_sts.transform.preprocess import *
 from ihlt_sts.transform.pos_lemmas import *
 from ihlt_sts.transform.synsets import *
 
-from ihlt_sts.similarity.set import *
 from ihlt_sts.similarity.synset import *
 
 

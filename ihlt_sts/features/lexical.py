@@ -1,12 +1,10 @@
 import numpy as np
-import pandas as pd
 
 from ihlt_sts.transform.preprocess import *
 from ihlt_sts.transform.pos_lemmas import *
-from ihlt_sts.transform.synsets import *
+from ihlt_sts.transform.ngrams import *
 
 from ihlt_sts.similarity.set import *
-from ihlt_sts.similarity.synset import *
 
 
 def preprocessed_tokens_set_similarity(s_df, set_sim="jaccard"):
@@ -243,10 +241,12 @@ def ngram_overlap(s_df, n):
         ngram_1 = set(get_ngrams(tkns_1, n=n))
         ngram_2 = set(get_ngrams(tkns_2, n=n))
 
-        if len(ngram_1 & ngram_2) == 0:
+        l1, l2, l12 = len(ngram_1), len(ngram_2), len(ngram_1 & ngram_2)
+
+        if l12 == 0:
             sim_arr[idx] = 0
         else:
-            sim_arr[idx] = 2 * (1 / (len(ngram_1) / len(ngram_1 & ngram_2) + len(ngram_2) / len(ngram_1 & ngram_2)))
+            sim_arr[idx] = 2 * l12 / (l1 + l2)
 
     return sim_arr
 
@@ -286,9 +286,11 @@ def ngram_stopwords_overlap(s_df, n):
         ngram_1 = set(get_ngrams(tkns_1, n=n))
         ngram_2 = set(get_ngrams(tkns_2, n=n))
 
-        if len(ngram_1 & ngram_2) == 0:
+        l1, l2, l12 = len(ngram_1), len(ngram_2), len(ngram_1 & ngram_2)
+
+        if l12 == 0:
             sim_arr[idx] = 0
         else:
-            sim_arr[idx] = 2 * (1 / (len(ngram_1) / len(ngram_1 & ngram_2) + len(ngram_2) / len(ngram_1 & ngram_2)))
+            sim_arr[idx] = 2 * l12 / (l1 + l2)
 
     return sim_arr
