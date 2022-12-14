@@ -29,10 +29,10 @@ def get_lexical_features(s_df):
     for set_sim_name in ["jaccard", "dice", "over", "cosine"]:
         feat_df["lemmas_stopwords_" + set_sim_name] = lemmas_stopwords_set_similarity(s_df, set_sim=set_sim_name)
 
-    for n in [1, 2, 3, 4]:
+    for n in [2, 3, 4]:
         feat_df[str(n) + "-gram_overlap"] = ngram_overlap(s_df, n)
 
-    for n in [1, 2, 3, 4]:
+    for n in [2, 3, 4]:
         feat_df[str(n) + "-gram_stopwords_overlap"] = ngram_stopwords_overlap(s_df, n)
 
     return feat_df
